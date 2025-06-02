@@ -15,7 +15,7 @@ namespace ECommerceAPI.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
 
             modelBuilder.Entity("ECommerceAPI.Models.CartItem", b =>
                 {
@@ -100,6 +100,7 @@ namespace ECommerceAPI.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -126,6 +127,7 @@ namespace ECommerceAPI.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Stock")
