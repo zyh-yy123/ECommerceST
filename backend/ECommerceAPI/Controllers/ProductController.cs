@@ -1,51 +1,61 @@
-using ECommerceAPI.Models;
-using ECommerceAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using ECommerceAPI.Models;
+using ECommerceAPI.Services;
 
 namespace ECommerceAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductsController : ControllerBase
+public class ProductController : ControllerBase
 {
-    private readonly IProductService _service;
+    private readonly IProductService _productService;
 
-    public ProductsController(IProductService service)
+    public ProductController(IProductService productService)
     {
-        _service = service;
+        _productService = productService;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Product>>> GetAll()
     {
-        return Ok(await _service.GetAllAsync());
+        var products = await _productService.GetAllAsync();
+        return Ok(products);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Product>> Get(int id)
+    public async Task<ActionResult<Product>> GetById(int id)
     {
-        var product = await _service.GetByIdAsync(id);
-        return product == null ? NotFound() : Ok(product);
+        var product = await _productService.GetByIdAsync(id);
+        if (product == null)
+            return NotFound();
+
+        return Ok(product);
     }
 
     [HttpPost]
     public async Task<ActionResult<Product>> Create(Product product)
     {
-        var created = await _service.AddAsync(product);
-        return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
+        var createdProduct = await _productService.AddAsync(product);
+        return CreatedAtAction(nameof(GetById), new { id = createdProduct.Id }, createdProduct);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Product product)
+    public async Task<ActionResult<Product>> Update(int id, Product product)
     {
-        var updated = await _service.UpdateAsync(id, product);
-        return updated == null ? NotFound() : Ok(updated);
+        var updatedProduct = await _productService.UpdateAsync(id, product);
+        if (updatedProduct == null)
+            return NotFound();
+
+        return Ok(updatedProduct);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<ActionResult> Delete(int id)
     {
-        var success = await _service.DeleteAsync(id);
-        return success ? NoContent() : NotFound();
+        var result = await _productService.DeleteAsync(id);
+        if (!result)
+            return NotFound();
+
+        return NoContent();
     }
 }

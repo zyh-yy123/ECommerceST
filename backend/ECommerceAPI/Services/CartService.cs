@@ -1,6 +1,5 @@
 using ECommerceAPI.Data;
 using ECommerceAPI.Models;
-using ECommerceAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceAPI.Services;
@@ -24,6 +23,16 @@ public class CartService : ICartService
 
     public async Task<CartItem> AddAsync(CartItem item)
     {
+        var existingItem = await _context.CartItems
+            .FirstOrDefaultAsync(c => c.UserId == item.UserId && c.ProductId == item.ProductId);
+
+        if (existingItem != null)
+        {
+            existingItem.Quantity += item.Quantity;
+            await _context.SaveChangesAsync();
+            return existingItem;
+        }
+
         _context.CartItems.Add(item);
         await _context.SaveChangesAsync();
         return item;
@@ -31,22 +40,22 @@ public class CartService : ICartService
 
     public async Task<bool> RemoveAsync(int id)
     {
-        var item = await _context.CartItems.FindAsync(id);
-        if (item == null) return false;
+        var cartItem = await _context.CartItems.FindAsync(id);
+        if (cartItem == null) return false;
 
-        _context.CartItems.Remove(item);
+        _context.CartItems.Remove(cartItem);
         await _context.SaveChangesAsync();
         return true;
     }
 
     public async Task<CartItem?> UpdateQuantityAsync(int id, int quantity)
     {
-        var item = await _context.CartItems.FindAsync(id);
-        if (item == null) return null;
+        var cartItem = await _context.CartItems.FindAsync(id);
+        if (cartItem == null) return null;
 
-        item.Quantity = quantity;
+        cartItem.Quantity = quantity;
         await _context.SaveChangesAsync();
-        return item;
+        return cartItem;
     }
 }
 

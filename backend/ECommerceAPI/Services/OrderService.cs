@@ -20,6 +20,7 @@ public class OrderService : IOrderService
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
             .Where(o => o.UserId == userId)
+            .OrderByDescending(o => o.CreatedAt)
             .ToListAsync();
     }
 
@@ -33,8 +34,27 @@ public class OrderService : IOrderService
 
     public async Task<Order> CreateOrderAsync(Order order)
     {
+        order.OrderNumber = GenerateOrderNumber();
+        order.CreatedAt = DateTime.UtcNow;
+        order.Status = "Pending";
+
         _context.Orders.Add(order);
         await _context.SaveChangesAsync();
         return order;
+    }
+
+    public async Task<Order?> UpdateStatusAsync(int id, string status)
+    {
+        var order = await _context.Orders.FindAsync(id);
+        if (order == null) return null;
+
+        order.Status = status;
+        await _context.SaveChangesAsync();
+        return order;
+    }
+
+    private string GenerateOrderNumber()
+    {
+        return $"ORD{DateTime.UtcNow:yyyyMMddHHmmss}";
     }
 }

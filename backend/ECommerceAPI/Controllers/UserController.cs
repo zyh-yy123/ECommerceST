@@ -1,6 +1,8 @@
 using ECommerceAPI.Models;
 using ECommerceAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using ECommerceAPI.Models.DTOs;
+using ECommerceAPI.Services;
 
 namespace ECommerceAPI.Controllers;
 
@@ -47,5 +49,41 @@ public class UsersController : ControllerBase
     {
         var success = await _service.DeleteAsync(id);
         return success ? NoContent() : NotFound();
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] UserRegistrationDto registrationDto)
+    {
+        try
+        {
+            var user = await _service.RegisterAsync(registrationDto);
+            return Ok(new { message = "Registration successful", userId = user.Id });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, new { message = "An error occurred while registering the user" });
+        }
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] UserLoginDto loginDto)
+    {
+        try
+        {
+            var result = await _service.LoginAsync(loginDto);
+            if (result == null)
+            {
+                return BadRequest(new { message = "Invalid username or password" });
+            }
+            return Ok(new { success = true, data = result });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred while logging in" });
+        }
     }
 }

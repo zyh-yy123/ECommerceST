@@ -1,6 +1,6 @@
 using ECommerceAPI.Models;
 
-namespace ECommerceAPI.Services.Interfaces;
+namespace ECommerceAPI.Services;
 
 public interface ICartService
 {
@@ -8,5 +8,4 @@ public interface ICartService
     Task<CartItem> AddAsync(CartItem item);
     Task<bool> RemoveAsync(int id);
     Task<CartItem?> UpdateQuantityAsync(int id, int quantity);
-}
-
+} 

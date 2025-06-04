@@ -1,6 +1,6 @@
 using ECommerceAPI.Models;
 
-namespace ECommerceAPI.Services.Interfaces;
+namespace ECommerceAPI.Services;
 
 public interface IProductService
 {

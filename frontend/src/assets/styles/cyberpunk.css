@@ -1,0 +1,273 @@
+:root {
+    /* 赛博朋克主题颜色 */
+    --neon-blue: #00f3ff;
+    --neon-pink: #ff00ff;
+    --neon-yellow: #ffff00;
+    --neon-purple: #9d00ff;
+    --darker-bg: #0a0a0a;
+    --dark-bg: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #888888;
+}
+
+/* 全局样式 */
+body {
+    background-color: var(--darker-bg);
+    color: var(--text-primary);
+    font-family: 'Orbitron', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-image: 
+        linear-gradient(45deg, rgba(0, 243, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(-45deg, rgba(255, 0, 255, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+}
+
+/* 赛博朋克按钮样式 */
+.cyber-button {
+    background: transparent;
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue);
+    padding: 10px 20px;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.cyber-button:hover {
+    background: var(--neon-blue);
+    color: var(--darker-bg);
+    box-shadow: 0 0 10px var(--neon-blue);
+}
+
+.cyber-button:disabled {
+    border-color: var(--text-secondary);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+}
+
+/* 赛博朋克输入框样式 */
+.cyber-input {
+    background: var(--dark-bg);
+    border: 1px solid var(--neon-blue);
+    color: var(--text-primary);
+    padding: 10px;
+    font-family: 'Orbitron', sans-serif;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.cyber-input:focus {
+    outline: none;
+    box-shadow: 0 0 10px var(--neon-blue);
+}
+
+/* 赛博朋克卡片样式 */
+.cyber-card {
+    background: var(--dark-bg);
+    border: 1px solid var(--neon-blue);
+    box-shadow: 0 0 10px var(--neon-blue);
+    padding: 20px;
+    margin: 10px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.cyber-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+}
+
+/* 赛博朋克标题样式 */
+.cyber-title {
+    color: var(--neon-blue);
+    text-shadow: 0 0 10px var(--neon-blue);
+    font-size: 2em;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+}
+
+.cyber-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--neon-blue), transparent);
+}
+
+/* 赛博朋克导航栏样式 */
+.cyber-nav {
+    background: var(--darker-bg);
+    border-bottom: 2px solid var(--neon-blue);
+    padding: 15px;
+}
+
+.cyber-nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    margin: 0 15px;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.cyber-nav a:hover {
+    color: var(--neon-pink);
+    text-shadow: 0 0 10px var(--neon-pink);
+}
+
+/* 赛博朋克表格样式 */
+.cyber-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.cyber-table th,
+.cyber-table td {
+    border: 1px solid var(--neon-blue);
+    padding: 10px;
+    text-align: left;
+}
+
+.cyber-table th {
+    background: var(--darker-bg);
+    color: var(--neon-yellow);
+}
+
+.cyber-table tr:hover {
+    background: rgba(5, 217, 232, 0.1);
+}
+
+/* 赛博朋克加载动画 */
+.cyber-loader {
+    width: 50px;
+    height: 50px;
+    border: 3px solid var(--neon-blue);
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 网格背景动画 */
+@keyframes grid-animation {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 30px 30px;
+    }
+}
+
+/* 霓虹文字效果 */
+.neon-text {
+    text-shadow: 
+        0 0 5px var(--neon-blue),
+        0 0 10px var(--neon-blue),
+        0 0 20px var(--neon-blue);
+}
+
+/* 故障效果 */
+.glitch {
+    position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 var(--neon-pink);
+    animation: glitch-1 2s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+    left: -2px;
+    text-shadow: 2px 0 var(--neon-blue);
+    animation: glitch-2 3s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-1 {
+    0% {
+        clip-path: inset(20% 0 30% 0);
+    }
+    20% {
+        clip-path: inset(60% 0 10% 0);
+    }
+    40% {
+        clip-path: inset(40% 0 50% 0);
+    }
+    60% {
+        clip-path: inset(80% 0 5% 0);
+    }
+    80% {
+        clip-path: inset(10% 0 70% 0);
+    }
+    100% {
+        clip-path: inset(30% 0 20% 0);
+    }
+}
+
+@keyframes glitch-2 {
+    0% {
+        clip-path: inset(15% 0 35% 0);
+    }
+    20% {
+        clip-path: inset(55% 0 15% 0);
+    }
+    40% {
+        clip-path: inset(45% 0 45% 0);
+    }
+    60% {
+        clip-path: inset(75% 0 10% 0);
+    }
+    80% {
+        clip-path: inset(15% 0 65% 0);
+    }
+    100% {
+        clip-path: inset(25% 0 25% 0);
+    }
+}
+
+/* 赛博朋克警告和错误消息 */
+.cyber-alert {
+    border: 2px solid var(--neon-pink);
+    background: rgba(255, 42, 109, 0.1);
+    color: var(--neon-pink);
+    padding: 15px;
+    margin: 10px 0;
+    position: relative;
+}
+
+.cyber-alert::before {
+    content: '!';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5em;
+    color: var(--neon-pink);
+} 

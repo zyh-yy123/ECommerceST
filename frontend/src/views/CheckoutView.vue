@@ -1,7 +1,7 @@
 <template>
-  <div style="max-width: 600px; margin: 20px auto;">
-    <h2>结算</h2>
-    <el-form :model="order" :rules="rules" ref="orderForm" label-width="100px">
+  <div class="checkout-container">
+    <h2 class="cyber-title">结算</h2>
+    <el-form :model="order" :rules="rules" ref="orderForm" label-width="100px" class="checkout-form">
       <el-form-item label="收货人" prop="name">
         <el-input v-model="order.name"></el-input>
       </el-form-item>
@@ -26,7 +26,7 @@ import { ref, onMounted } from 'vue';
 import http from '../services/http';
 
 export default {
-  name: 'CheckOut',//out大写
+  name: 'CheckOut',
   setup() {
     const orderForm = ref(null);
     const order = ref({
@@ -45,7 +45,7 @@ export default {
 
     const loadCartItems = async () => {
       try {
-        const cartItems = await http.get('/Cart/user/1');
+        const cartItems = await http.get('/api/cart');
         order.value.items = cartItems.map(item => ({
           productId: item.product.id,
           quantity: item.quantity
@@ -59,7 +59,7 @@ export default {
       orderForm.value.validate(async valid => {
         if (!valid) return;
         try {
-          const res = await http.post('/Order', order.value);
+          const res = await http.post('/api/orders/create', order.value);
           window.alert('下单成功，订单号：' + res.orderNumber);
           window.location.href = '/orders';
         } catch (error) {
@@ -78,8 +78,26 @@ export default {
 </script>
 
 <style scoped>
-h2 {
+.checkout-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cyber-title {
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
   text-align: center;
-  margin: 20px 0;
+}
+
+.checkout-form {
+  background: rgba(20, 20, 20, 0.9);
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
 }
 </style>

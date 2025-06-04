@@ -1,6 +1,6 @@
 <template>
-  <div style="padding: 20px;">
-    <h2>商品列表</h2>
+  <div class="products-container">
+    <h2 class="cyber-title">商品列表</h2>
     <el-table :data="products" style="width: 100%">
       <el-table-column prop="id" label="ID" width="80"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
@@ -31,7 +31,7 @@ export default {
 
     const fetchProducts = async () => {
       try {
-        const res = await http.get('/Product'); // 对应后端 GET /api/Product
+        const res = await http.get('/api/products');
         products.value = res;
       } catch (error) {
         console.error('获取商品失败：', error);
@@ -45,8 +45,7 @@ export default {
 
     const addToCart = async id => {
       try {
-        // 简化示例，当前用户 ID 硬编码为 1
-        await http.post('/Cart', { userId: 1, productId: id, quantity: 1 });
+        await http.post('/api/cart/add', { productId: id, quantity: 1 });
         window.alert('添加购物车成功');
       } catch (error) {
         console.error('添加购物车失败：', error);
@@ -63,7 +62,16 @@ export default {
 </script>
 
 <style scoped>
-h2 {
+.products-container {
+  padding: 20px;
+}
+
+.cyber-title {
+  color: var(--primary-color);
   margin-bottom: 20px;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
 }
 </style>

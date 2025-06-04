@@ -1,4 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import Register from '../views/Register.vue';
+import Products from '../views/Products.vue';
+import Cart from '../views/Cart.vue';
+import Orders from '../views/Orders.vue';
 
 // **先引入我们刚才创建好的多单词命名的组件**
 const HomeView = () => import('../views/HomeView.vue');
@@ -11,30 +15,33 @@ const CheckoutView = () => import('../views/CheckoutView.vue');
 const OrderHistoryView = () => import('../views/OrderHistoryView.vue');
 
 const routes = [
-  // 根路径重定向到 /home
+  // 根路径重定向到 /products
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/products'
   },
   {
     path: '/home',
-    name: 'HomeView',           // **name 可以和组件内部的 name 一致，也可以不用精确匹配，但建议一致**
+    name: 'HomeView',
     component: HomeView
   },
   {
     path: '/login',
     name: 'LoginView',
-    component: LoginView
+    component: LoginView,
+    meta: { requiresAuth: false }
   },
   {
     path: '/register',
-    name: 'RegisterView',
-    component: RegisterView
+    name: 'Register',
+    component: Register,
+    meta: { requiresAuth: false }
   },
   {
     path: '/products',
-    name: 'ProductListView',
-    component: ProductListView
+    name: 'Products',
+    component: Products,
+    meta: { requiresAuth: true }
   },
   {
     path: '/product/:id',
@@ -44,8 +51,9 @@ const routes = [
   },
   {
     path: '/cart',
-    name: 'CartView',
-    component: CartView
+    name: 'Cart',
+    component: Cart,
+    meta: { requiresAuth: true }
   },
   {
     path: '/checkout',
@@ -53,15 +61,35 @@ const routes = [
     component: CheckoutView
   },
   {
+    path: '/checkout/:orderId',
+    name: 'Checkout',
+    component: () => import('../views/Checkout.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/orders',
-    name: 'OrderHistoryView',
-    component: OrderHistoryView
+    name: 'Orders',
+    component: Orders,
+    meta: { requiresAuth: true }
   }
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+});
+
+// 路由守卫
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('token');
+  
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/login');
+  } else if (!to.meta.requiresAuth && isAuthenticated) {
+    next('/products');
+  } else {
+    next();
+  }
 });
 
 export default router;

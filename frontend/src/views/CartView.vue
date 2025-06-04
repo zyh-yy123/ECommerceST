@@ -1,6 +1,6 @@
 <template>
-  <div style="padding: 20px;">
-    <h2>购物车</h2>
+  <div class="cart-container">
+    <h2 class="cyber-title">购物车</h2>
     <el-table :data="cartItems" style="width: 100%">
       <el-table-column prop="product.name" label="商品" />
       <el-table-column prop="product.price" label="价格" width="100">
@@ -30,7 +30,7 @@
       </el-table-column>
     </el-table>
 
-    <div style="margin-top: 20px; text-align: right;">
+    <div class="cart-summary">
       <h3>总计：￥{{ totalAmount.toFixed(2) }}</h3>
       <el-button type="primary" @click="goToCheckout">去结算</el-button>
     </div>
@@ -49,7 +49,7 @@ export default {
 
     const fetchCart = async () => {
       try {
-        const res = await http.get('/Cart/user/1');
+        const res = await http.get('/api/cart');
         cartItems.value = res;
       } catch (error) {
         console.error('获取购物车失败：', error);
@@ -58,7 +58,7 @@ export default {
 
     const updateCart = async item => {
       try {
-        await http.put(`/Cart/${item.id}`, { quantity: item.quantity });
+        await http.put(`/api/cart/update/${item.id}`, { quantity: item.quantity });
         ElMessage.success('更新成功');
         await fetchCart();
       } catch (error) {
@@ -68,7 +68,7 @@ export default {
 
     const removeFromCart = async id => {
       try {
-        await http.delete(`/Cart/${id}`);
+        await http.delete(`/api/cart/remove/${id}`);
         ElMessage.success('删除成功');
         await fetchCart();
       } catch (error) {
@@ -94,7 +94,30 @@ export default {
 </script>
 
 <style scoped>
-h2 {
+.cart-container {
+  padding: 20px;
+}
+
+.cyber-title {
+  color: var(--primary-color);
   margin-bottom: 20px;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+}
+
+.cart-summary {
+  margin-top: 20px;
+  text-align: right;
+  padding: 20px;
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.cart-summary h3 {
+  color: var(--primary-color);
+  margin-bottom: 15px;
 }
 </style>

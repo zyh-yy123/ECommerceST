@@ -29,7 +29,7 @@ export default {
 
     const fetchProduct = async () => {
       try {
-        const res = await http.get(`/Product/${productId}`); // 对应后端 GET /api/Product/{id}
+        const res = await http.get(`/api/products/${productId}`);
         product.value = res;
       } catch (error) {
         console.error('获取商品详情失败：', error);
@@ -39,7 +39,7 @@ export default {
     const addToCart = async () => {
       if (!product.value) return;
       try {
-        await http.post('/Cart', { userId: 1, productId, quantity: quantity.value });
+        await http.post('/api/cart/add', { productId, quantity: quantity.value });
         window.alert('添加购物车成功');
       } catch (error) {
         console.error('添加购物车失败：', error);

@@ -3,7 +3,7 @@ import { ElMessage } from 'element-plus';
 
 // 创建 Axios 实例
 const http = axios.create({
-  baseURL: 'https://localhost:5001/api', // 对应后端 WebAPI 的根路径
+  baseURL: 'http://localhost:5101', // 修改为后端实际运行的端口
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json'
@@ -13,10 +13,9 @@ const http = axios.create({
 // 请求拦截器：加入 Token（如果有）
 http.interceptors.request.use(
   config => {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    // 假设后端未实现 JWT，仅示例：
-    if (user && user.token) {
-      config.headers.Authorization = `Bearer ${user.token}`;
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },

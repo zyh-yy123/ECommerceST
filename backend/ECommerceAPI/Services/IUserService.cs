@@ -1,6 +1,7 @@
 using ECommerceAPI.Models;
+using ECommerceAPI.Models.DTOs;
 
-namespace ECommerceAPI.Services.Interfaces;
+namespace ECommerceAPI.Services;
 
 public interface IUserService
 {
@@ -9,6 +10,10 @@ public interface IUserService
     Task<User> AddAsync(User user);
     Task<User?> UpdateAsync(int id, User updatedUser);
     Task<bool> DeleteAsync(int id);
+    Task<User> RegisterAsync(UserRegistrationDto registrationDto);
+    Task<User?> GetUserByUsernameAsync(string username);
+    Task<User?> GetUserByEmailAsync(string email);
+    Task<UserLoginResponseDto?> LoginAsync(UserLoginDto loginDto);
 }
 
 

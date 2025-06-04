@@ -1,5 +1,5 @@
 using ECommerceAPI.Models;
-using ECommerceAPI.Services.Interfaces;
+using ECommerceAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceAPI.Controllers;

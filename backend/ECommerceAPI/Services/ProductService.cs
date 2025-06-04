@@ -1,6 +1,5 @@
 using ECommerceAPI.Data;
 using ECommerceAPI.Models;
-using ECommerceAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceAPI.Services;
@@ -16,14 +15,12 @@ public class ProductService : IProductService
 
     public async Task<IEnumerable<Product>> GetAllAsync()
     {
-        return await _context.Products.Include(p => p.Reviews).ToListAsync();
+        return await _context.Products.ToListAsync();
     }
 
     public async Task<Product?> GetByIdAsync(int id)
     {
-        return await _context.Products
-            .Include(p => p.Reviews)
-            .FirstOrDefaultAsync(p => p.Id == id);
+        return await _context.Products.FindAsync(id);
     }
 
     public async Task<Product> AddAsync(Product product)
@@ -33,19 +30,19 @@ public class ProductService : IProductService
         return product;
     }
 
-    public async Task<Product?> UpdateAsync(int id, Product updatedProduct)
+    public async Task<Product?> UpdateAsync(int id, Product product)
     {
-        var product = await _context.Products.FindAsync(id);
-        if (product == null) return null;
+        var existingProduct = await _context.Products.FindAsync(id);
+        if (existingProduct == null) return null;
 
-        product.Name = updatedProduct.Name;
-        product.Description = updatedProduct.Description;
-        product.Price = updatedProduct.Price;
-        product.Stock = updatedProduct.Stock;
-        product.ThumbnailUrl = updatedProduct.ThumbnailUrl;
+        existingProduct.Name = product.Name;
+        existingProduct.Description = product.Description;
+        existingProduct.Price = product.Price;
+        existingProduct.Stock = product.Stock;
+        existingProduct.ThumbnailUrl = product.ThumbnailUrl;
 
         await _context.SaveChangesAsync();
-        return product;
+        return existingProduct;
     }
 
     public async Task<bool> DeleteAsync(int id)

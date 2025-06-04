@@ -1,6 +1,6 @@
 <template>
-  <div style="padding: 20px;">
-    <h2>我的订单</h2>
+  <div class="orders-container">
+    <h2 class="cyber-title">我的订单</h2>
     <el-table :data="orders" style="width: 100%">
       <el-table-column prop="orderNumber" label="订单号"></el-table-column>
       <el-table-column prop="totalAmount" label="总金额" width="120">
@@ -43,6 +43,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import http from '../services/http';
+import { ElMessage } from 'element-plus';
 
 export default {
   name: 'OrderHistory',
@@ -51,15 +52,16 @@ export default {
 
     const fetchOrders = async () => {
       try {
-        orders.value = await http.get('/Order/user/1');
+        orders.value = await http.get('/api/orders');
       } catch (error) {
         console.error('获取订单列表失败：', error);
       }
     };
 
-    const confirmReceipt = async orderId => {
+    const confirmReceipt = async (orderId) => {
       try {
-        await http.post(`/Order/confirm/${orderId}`);
+        await http.post(`/api/orders/${orderId}/complete`);
+        ElMessage.success('确认收货成功');
         await fetchOrders();
       } catch (error) {
         console.error('确认收货失败：', error);
@@ -76,7 +78,16 @@ export default {
 </script>
 
 <style scoped>
-h2 {
+.orders-container {
+  padding: 20px;
+}
+
+.cyber-title {
+  color: var(--primary-color);
   margin-bottom: 20px;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
 }
 </style>
